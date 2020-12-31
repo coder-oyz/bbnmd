@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>论坛</title>
+<!--<Link rel="stylesheet" type="text/css" href="../style/style.css" />-->
+<Link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+
+<style>
+ul,li{
+	list-style:none;
+}
+#yc_index{
+	width: 80%;
+	margin-left: 10%;
+	}
+	a{
+		text-decoration: none;
+	}
+</style>
+
+</head>
+
+<body>
+<div id="yc_index"  v-cloak>
+
+	<nav class="navbar navbar-inverse">
+<!--	填充-->
+	</nav>
+	<nav class="navbar  navbar-default navbar-fixed-top">
+		<img alt="icon" src="../image/logo.png">
+
+	</nav>
+	<div class="panel panel-primary">
+		<div class="panel-heading" style="font-size: 18px">欢迎来到YC论坛！| &nbsp;<a href="login.html" style="color: #FFFFFF">返回登录</a>
+			<p style="float: right;font-size: 14px;padding-top: 10px" >当前用户：<span :style="{'color':redName(username)}">{{username}}</span></p>
+		</div>
+		<div class="panel-body">
+			<p>Peace cannot be kept by force，it can only be achieved by understanding.</p>
+			<p style="float: right">——Mobile Suit Gundam 00</p>
+		</div>
+	<!--      用户信息、登录、注册        -->
+	
+<!--	<div class="h" v-if="outlogin">-->
+<!--		您尚未　<a href="login.html">登录</a>-->
+<!--		&nbsp;| &nbsp; <a href="reg.html">注册</a> |-->
+<!--	</div>-->
+
+		<!-- Table -->
+		<table class="table" style="text-align: center">
+			<thead  style="background-color: aliceblue">
+				<tr>
+					<th><span class="glyphicon glyphicon-home" aria-hidden="true"></span></th>
+					<th style="text-align: center">版块</th>
+					<th style="text-align: center">主题总数</th>
+					<th style="text-align: center">最新帖子</th>
+					<th style="text-align: center">最后发表</th>
+				</tr>
+			</thead>
+			<tbody v-for="p in parentBoard">
+			<tr>
+				<th>&nbsp;&nbsp;<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></th>
+				<th style="font-size: 16px">{{p.bname}}</th>
+			</tr>
+			<tr v-for="c in child" v-if="c.parentid==p.bid">
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></th>
+				<td><a :href="'list.html#'+c.bid+'&'+c.bname">{{c.bname}}</a></td>
+				<td>{{c.total!=0?c.total:'[暂无记录]'}}</td>
+				<td><a :href="'detail.html#'+c.tid">{{c.title}}</a>&nbsp;[{{c.uname!=null?c.uname:'暂无发帖'}}]</td>
+				<td>{{c.recentmodifytime}}</td>
+			</tr>
+			</tbody>
+
+		</table>
+	
+
+	</div>
+
+</div>
+<div style="background-color: #363B3F;height: 100px;text-align: center;padding-top: 35px">
+	<p style="color: #FFFFFF">© 2020 源辰信息. ALL RIGHTS RESERVED.</p>
+</div>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script>
+
+var token=localStorage.getItem("token");
+
+let vm=new Vue({
+	el:'#yc_index',
+	data:{
+		parentBoard:{},//顶级板块
+		child:{},//子版块
+		username:'匿名',
+		onlogin:false,
+		outlogin:true
+	},
+	methods:{
+		redName(username){
+			switch (username) {
+				case 'mizuho': return'red';break;
+				default: return 'white';break;
+			}
+		}
+	},
+	mounted:function(){
+
+		//页面加载完成后
+		axios.all([checkLogin(),findIndex()]).then(axios.spread((fn1,fn2)=>{
+			console.log(fn1);
+			console.log(fn2.data);
+			if(0>=fn1.data.code){//用户未登录
+				window.location.href='login.html';
+			}else{
+				this.username=fn1.data.data.uname;
+				this.outlogin=false;
+				this.onlogin=true;
+				this.parentBoard=fn2.data.parent;
+				this.child=fn2.data.child;
+				console.log(this.parentBoard);
+				console.log(this.child);
+			}
+		}));
+
+	},
+
+
+});
+
+//检查用户是否登录
+function checkLogin(){
+	return axios.get("../bbnmd/view/check/"+token);
+}
+
+//显示首页板块信息
+function findIndex(){
+	return axios.get("../bbnmd/view");
+}
+
+</script>
+
+</body>
+</HTML>

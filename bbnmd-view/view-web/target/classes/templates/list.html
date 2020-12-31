@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>论坛--帖子列表</title>
+
+<!--<link rel="stylesheet" type="text/css" href="../style/style.css" />-->
+	<Link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+	<style>
+		ul,li{
+			list-style:none;
+		}
+		#yc_list{
+			width: 80%;
+			margin-left: 10%;
+		}
+	</style>
+</head>
+
+<body>
+<div id="yc_list" v-cloak>
+	<nav class="navbar navbar-inverse">
+		<!--	填充-->
+	</nav>
+	<nav class="navbar  navbar-default navbar-fixed-top">
+		<img alt="icon" src="../image/logo.png">
+
+	</nav>
+
+<!--      用户信息、登录、注册        -->
+
+<!--	<div class="h" v-if="outlogin">-->
+<!--		您尚未　<a href="login.html">登录</a>-->
+<!--		&nbsp;| &nbsp; <a href="reg.html">注册</a> |-->
+<!--	</div>-->
+<!--	<div class="h" v-if="onlogin">-->
+<!--		欢迎：{{uname}}-->
+<!--	</div>-->
+	<div class="panel panel-success">
+		<div class="panel-heading" style="font-size: 18px">&nbsp;<a href="index.html">论坛首页</a>&gt;&gt;
+			<a href="list.html">{{boardname}} 子版块</a>
+			<p style="float: right;font-size: 14px;padding-top: 10px">当前用户：<span :style="{'color':redName(uname)}">{{uname}}</span></p>
+		</div>
+
+		<div class="panel-body">
+			<p>Peace cannot be kept by force，it can only be achieved by understanding.</p>
+			<p style="float: right">——Mobile Suit Gundam 00</p>
+		</div>
+		<button type="button" class="btn btn-success" style="margin-left: 20px"><a :href="'post.html#add&'+boardid+'&'+boardname" style="text-underline: none;color: #FFFFFF">发表新帖</a></button>
+		<table class="table" style="text-align: center">
+			<tr>
+
+				<th style="text-align: center">帖名</th>
+				<th style="text-align: center">作者</th>
+				<th style="text-align: center">回复</th>
+				<th style="text-align: center">发表时间</th>
+				<th style="text-align: center">最后修改</th>
+
+
+			</tr>
+
+			</thead>
+
+			<tbody v-for="topic in topics">
+
+			<tr>
+
+				<td style="font-size: 16px"><a :href="'detail.html#'+topic.tid">
+					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+					{{topic.title}}</div>
+				</td>
+				<td align="center">{{topic.uname}}</td>
+				<td align="center">{{topic.total}}</td>
+				<td align="center">{{topic.publishtime}}</td>
+				<td align="center">{{topic.regtime}}</td>
+			</tr>
+			</tbody>
+
+		</table>
+	</div>
+
+<!--      新帖        -->
+<!--	<div>-->
+<!--		<a :href="'post.html#add&'+boardid+'&'+boardname"><img src="../image/post.gif" name="td_post" border="0" id=td_post></a>-->
+<!--	</div>-->
+<!--         翻 页         -->
+<!--	<div>-->
+<!--		<a href="javascript:void(0)" @click="findPre">上一页</a>|-->
+<!--		<a href="javascript:void(0)" @click="findNext">下一页</a>-->
+<!--	</div>-->
+
+<!--	<div class="t">-->
+<!--		<table cellSpacing="0" cellPadding="0" width="100%">		-->
+<!--			<tr>-->
+<!--				<TH class="h" style="WIDTH: 100%" colspan="4"><span>&nbsp;</span></TH>-->
+<!--			</tr>-->
+
+<!--         主 题 列 表        -->
+			
+<!--			<tr class="tr3" v-for="topic in topics">-->
+<!--				<td><img src="../image/topic.gif" border=0></td>-->
+<!--				<td style="FONT-SIZE: 15px">-->
+<!--					<a :href="'detail.html#'+topic.tid">{{topic.title}}</a>-->
+<!--				</td>-->
+<!--				<td align="center">{{topic.uname}}</td>-->
+<!--				<td align="center">{{topic.total}}</td>-->
+<!--			</tr>			-->
+<!--		</table>-->
+<!--	</div>-->
+<!--            翻 页          -->
+	<ul class="pager">
+		<li class="previous"><a href="javascript:void(0)" @click="findPre">Previous</a></li>
+		<li class="next"><a href="javascript:void(0)" @click="findNext">Next</a></li>
+	</ul>
+<!--	<div>-->
+<!--		<a href="javascript:void(0)" @click="findPre">上一页</a>|-->
+<!--		<a href="javascript:void(0)" @click="findNext">下一页</a>-->
+<!--	</div>-->
+</div>
+</div>
+<!--             声 明          -->
+<br/>
+<center class="gray">© 2020 源辰信息. ALL RIGHTS RESERVED.</center>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../js/qs.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script>
+var hash=window.location.hash;
+hash=hash.replace('#','');
+hash=hash.split('&');
+var token =localStorage.getItem("token");
+if(hash.length!=2){
+	window.location.href='index.html';
+}
+var bdid=hash[0];
+var bdname=hash[1];
+var pageNum=1;
+var pageSize=5;
+var app=new Vue({
+	el:'#yc_list',
+	data:{
+		page:1,
+		rows:2,
+		boardname:'',
+		boardid:'',
+		topics:{},
+		maxPage:'',//总条数
+		uname:'匿名',
+		onlogin:false,
+		outlogin:true
+	},
+	methods:{
+		redName(username){
+			switch (username) {
+				case 'mizuho': return'red';break;
+				default: return '#dff0d8';break;
+			}
+		},
+		findPre:function(){
+			if(this.page<=1){
+				alert("已到首页");
+				return;
+			}
+			this.page=this.page-1;
+			axios.get("../bbnmd/view/findPage",{params:{page:this.page,rows:this.rows,bid:this.boardid}}).then(result=>{
+				this.topics=result.data.data.data;
+			});
+		},
+		findNext:function(){
+			if(this.page>=this.maxPage){
+				alert("已到最后一页");
+				return;
+			}
+			this.page=this.page+1;
+			axios.get("../bbnmd/view/findPage",{params:{page:this.page,pageSize:this.rows,bid:this.boardid}}).then(result=>{
+				this.topics=result.data.data.data;
+			});
+		}
+	},
+	mounted:function(){
+		axios.all([checkLogin(),findByPage()]).then(axios.spread((fn1,fn2)=>{
+			if(!fn1.data){//用户未登录
+				alert("用户未登录!");
+				window.location.href='login.html';	
+			}else{
+				console.log(fn1);
+				console.log(fn2.data.data);
+				this.uname=fn1.data.data.uname;
+				this.outlogin=false;
+				this.onlogin=true;
+				this.topics=fn2.data.data.data;
+				console.log(this.topics);
+				this.maxPage=fn2.data.data.maxPage;
+				this.boardname=bdname;
+				this.boardid=bdid;
+			}
+		}));
+	}
+});
+//检查登录
+function checkLogin(){
+	return axios.get("../bbnmd/view/check/"+token);
+}
+//显示首页版权信息
+function findByPage(){
+	return axios.get("../bbnmd/view/findPage?page="+pageNum+"&pageSize="+pageSize+"&bid="+bdid);
+}
+</script>
+</body>
+</HTML>

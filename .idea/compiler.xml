@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="post-client" />
+        <module name="view-domain" />
+        <module name="turbine" />
+        <module name="post-web" />
+        <module name="user-client" />
+        <module name="security" />
+        <module name="view-client" />
+        <module name="config2" />
+        <module name="bbnmd-domain" />
+        <module name="eureka-for-high-config" />
+        <module name="zuul" />
+        <module name="view-restapi" />
+        <module name="user-restapi" />
+        <module name="view-web" />
+        <module name="config3" />
+        <module name="config" />
+        <module name="dashboard" />
+        <module name="user-domain" />
+        <module name="user-web" />
+        <module name="post-restapi" />
+        <module name="bbnmb-base-microserivce" />
+        <module name="post-domain" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bbnmb-base-microserivce" target="1.8" />
+      <module name="bbnmd" target="1.8" />
+      <module name="bbnmd-client-zuul" target="1.8" />
+      <module name="bbnmd-domain" target="1.8" />
+      <module name="bbnmd-post" target="1.8" />
+      <module name="bbnmd-topicapi" target="1.8" />
+      <module name="bbnmd-user" target="1.8" />
+      <module name="bbnmd-userapi" target="1.8" />
+      <module name="bbnmd-view" target="1.8" />
+      <module name="bbnmd-web" target="1.8" />
+      <module name="config" target="1.8" />
+      <module name="config2" target="1.8" />
+      <module name="config3" target="1.8" />
+      <module name="dashboard" target="1.8" />
+      <module name="eureka-for-high-config" target="1.8" />
+      <module name="post-client" target="1.8" />
+      <module name="post-domain" target="1.8" />
+      <module name="post-restapi" target="1.8" />
+      <module name="post-web" target="1.8" />
+      <module name="security" target="1.8" />
+      <module name="turbine" target="1.8" />
+      <module name="user-client" target="1.8" />
+      <module name="user-domain" target="1.8" />
+      <module name="user-restapi" target="1.8" />
+      <module name="user-web" target="1.8" />
+      <module name="view-client" target="1.8" />
+      <module name="view-domain" target="1.8" />
+      <module name="view-restapi" target="1.8" />
+      <module name="view-web" target="1.8" />
+      <module name="zuul" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

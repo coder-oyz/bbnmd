@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>论坛--注册</title>
+<!--<Link rel="stylesheet" type="text/css" href="../style/style.css"/>-->
+	<Link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+
+	<style>
+
+		body{
+			width: 80%;
+			margin-left: 10%;
+		}
+		a{
+			text-decoration: none;
+			color: #FFFFFF;
+		}
+	</style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+	<!--	填充-->
+</nav>
+<nav class="navbar  navbar-default navbar-fixed-top">
+	<img alt="icon" src="../image/logo.png">
+
+</nav>
+<!--      用户信息、登录、注册        -->
+
+<!--	<div class="h">-->
+<!--		您尚未　<a href="login.html">登录</a>-->
+<!--		&nbsp;| &nbsp; <a href="reg.html">注册</a> |-->
+<!--	</div>-->
+
+<div class="panel panel-primary">
+	<div class="panel-heading" style="font-size: 18px;">&nbsp;
+		<a href="login.html" style="color: #FFFFFF;text-decoration: none">YC论坛</a>
+		| &nbsp; <a href="login.html">登录</a>
+		&nbsp;| &nbsp; <a href="reg.html">注册</a> &nbsp;|
+	</div>
+	<div class="panel-body">
+		<p>Peace cannot be kept by force，it can only be achieved by understanding.</p>
+		<p style="float: right">——Mobile Suit Gundam 00</p>
+	</div>
+	<div id="yc_reg" class="t" style="MARGIN-TOP: 15px" align="center">
+		<form name="regform" action="" method="post">
+			<table class="table" style="text-align: center">
+				<tr>
+					<th style="text-align: center">》》注册《《</th>
+				</tr>
+				<tr>
+					<td>
+						用户名: &nbsp;	<input class="input" tabIndex="1" v-model="uname" tryp="text" maxLength="20" size="40" name="uName">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						密　码: &nbsp;<input class="input" tabIndex="2" v-model="upwd" type="password" maxLength="20" size="40" name="uPwd">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						重复密：<input class="input" tabIndex="3" v-model="upass1" type="password" maxLength="20" size="40" name="uPass1">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						性别：
+						女 &nbsp;<input type="radio" name="gender" v-model="gender" value="1">
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						男 &nbsp;<input type="radio" name="gender" v-model="gender" value="2" checked="checked" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<br/>请选择头像 <br/>
+					<image src="../image/head/1.gif"/><input type="radio" v-model="head" name="head" value="1.gif" checked="checked">
+					<img src="../image/head/2.gif"/><input type="radio" v-model="head" name="head" value="2.gif">
+					<img src="../image/head/3.gif"/><input type="radio" v-model="head" name="head" value="3.gif">
+					<img src="../image/head/4.gif"/><input type="radio" v-model="head" name="head" value="4.gif">
+					<img src="../image/head/5.gif"/><input type="radio" v-model="head" name="head" value="5.gif">
+					<br/>
+					<img src="../image/head/6.gif"/><input type="radio" v-model="head" name="head" value="6.gif">
+					<img src="../image/head/7.gif"/><input type="radio" v-model="head" name="head" value="7.gif">
+					<img src="../image/head/8.gif"/><input type="radio" v-model="head" name="head" value="8.gif">
+					<img src="../image/head/9.gif"/><input type="radio" v-model="head" name="head" value="9.gif">
+					<img src="../image/head/10.gif"/><input type="radio" v-model="head" name="head" value="10.gif">
+					<br/>
+					<img src="../image/head/11.gif"/><input type="radio" v-model="head" name="head" value="11.gif">
+					<img src="../image/head/12.gif"/><input type="radio" v-model="head" name="head" value="12.gif">
+					<img src="../image/head/13.gif"/><input type="radio" v-model="head" name="head" value="13.gif">
+					<img src="../image/head/14.gif"/><input type="radio" v-model="head" name="head" value="14.gif">
+					<img src="../image/head/15.gif"/><input type="radio" v-model="head" name="head" value="15.gif">
+					<br/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input class="btn btn-primary" tabIndex="4" type="button" value="注 册" @click="reg">
+					</td>
+				</tr>
+				</thead>
+
+			</table>
+		</form>
+	</div>
+</div>
+
+<!--      声明        -->
+<br>
+<center class="gray">© 2020 源辰信息. ALL RIGHTS RESERVED.</center>
+
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script>
+let vm=new Vue({
+	el:'#yc_reg',
+	data:{
+		uname:'',
+		upwd:'',
+		upass1:'',
+		head:'1.gif',
+		gender:''
+	},
+	methods:{
+		reg:function(){
+
+			axios.post('../bbnmd/user', {uname:this.uname,upwd:this.upwd,head:this.head,gender:this.gender}).then(result=>{
+				var data=result.data;
+				console.log(data);
+				if(0>=data.code){
+					alert('注册失败');
+					this.uname='';
+					this.upwd='';
+				}else{
+					alert("账号"+data.data.uname+"注册成功！");
+					window.location.href='login.html'
+				}
+			});
+
+		}
+	}
+});
+
+
+</script>
+</body>
+</HTML>

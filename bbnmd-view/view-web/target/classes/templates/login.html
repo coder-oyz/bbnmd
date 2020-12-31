@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>论坛--登录</title>
+<!--<Link rel="stylesheet" type="text/css" href="../style/style.css"/>-->
+	<Link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+
+	<style>
+		a{
+			text-decoration: none;
+			color: #FFFFFF;
+		}
+
+		body{
+			width: 80%;
+			margin-left: 10%;
+		}
+
+	</style>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+	<!--	填充-->
+</nav>
+<nav class="navbar  navbar-default navbar-fixed-top">
+	<img alt="icon" src="../image/logo.png">
+
+</nav>
+
+<div class="panel panel-primary">
+	<div class="panel-heading" style="font-size: 18px;">&nbsp;
+		<a href="login.html" style="color: #FFFFFF;text-decoration: none">YC论坛</a>
+		| &nbsp; <a href="login.html">登录</a>
+		&nbsp;| &nbsp; <a href="reg.html">注册</a> &nbsp;|
+		</div>
+	<div class="panel-body">
+		<p>Peace cannot be kept by force，it can only be achieved by understanding.</p>
+		<p style="float: right">——Mobile Suit Gundam 00</p>
+	</div>
+	<div id="yc_login" class="t" style="MARGIN-TOP: 15px" align="center">
+		<form name="loginform" action="" method="post">
+			<table class="table" style="text-align: center">
+				<tr>
+					<th style="text-align: center">》》登录《《</th>
+				</tr>
+				<tr>
+					<td>
+						用户名: &nbsp;<input class="input" v-model="uname" tabIndex="1"  type="text"      maxLength="20" size="40" name="uName">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						密　码: &nbsp;<input class="input" v-model="upwd" tabIndex="2"  type="password"  maxLength="20" size="40" name="uPwd">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<br/><input class="btn btn-primary"  tabIndex="6"  type="button" value="登 录" @click="login">
+					</td>
+				</tr>
+				</thead>
+
+			</table>
+<!--			<br/>用户名 &nbsp;<input class="input" v-model="uname" tabIndex="1"  type="text"      maxLength="20" size="35" name="uName">-->
+<!--			<br/>密　码 &nbsp;<input class="input" v-model="upwd" tabIndex="2"  type="password"  maxLength="20" size="40" name="uPwd">-->
+<!--			<br/><input class="btn-primary"  tabIndex="6"  type="button" value="登 录" @click="login">-->
+		</form>
+	</div>
+
+</div>
+
+
+
+<BR/>
+
+<CENTER class="gray">© 2020 源辰信息. ALL RIGHTS RESERVED.</CENTER>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../js/qs.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script >
+
+
+let vm=new Vue({
+	el:'#yc_login',
+
+	data:{
+		uname:'',
+		upwd:''
+	},
+	methods:{
+
+		login:function(){
+
+			axios.get("../bbnmd/user/login", {params:{uname:this.uname,upwd:this.upwd}}).then(result=>{
+
+				var data=result.data;
+				var token=data.token;
+				console.log(data);
+
+				//alert(data.data.uname);
+				if(0>=data.code){
+					alert('登录失败');
+					this.uname='';
+					this.upwd='';
+				}else{
+					localStorage.setItem("token",token);
+
+					 window.location.href='index.html';
+				}
+			});
+		}
+	}
+});
+</script>
+</body>
+</HTML>

@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>论坛--看贴</title>
+<!--<Link rel="stylesheet" type="text/css" href="../style/style.css" />-->
+	<Link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+	<style>
+		ul,li{
+			list-style:none;
+		}
+		#yc_detail{
+			width: 80%;
+			margin-left: 10%;
+		}
+	</style>
+</head>
+
+<body>
+<div id="yc_detail">
+	<nav class="navbar navbar-inverse">
+		<!--	填充-->
+	</nav>
+	<nav class="navbar  navbar-default navbar-fixed-top">
+		<img alt="icon" src="../image/logo.png">
+
+	</nav>
+
+	<div class="panel panel-success">
+		<div class="panel-heading" style="font-size: 18px">&nbsp;<a href="index.html">论坛首页</a>&gt;&gt;
+			<a :href="'list.html#'+topic.bid+'&'+topic.bname">{{topic.bname}}</a>
+			<p style="float: right;font-size: 14px;padding-top: 10px">当前用户：<span :style="{'color':redName(uname)}">{{uname}}</span></p>
+		</div>
+		<div class="panel-body">
+			<p>Peace cannot be kept by force，it can only be achieved by understanding.</p>
+			<p style="float: right">——Mobile Suit Gundam 00</p>
+		</div>
+		<button type="button" class="btn btn-success" style="margin-left: 20px">
+			<a :href="'post.html#add&'+topic.bid+'&'+topic.bname" style="text-underline: none;color: #FFFFFF">发表新帖</a></button>
+		<button type="button" class="btn btn-success" style="margin-left: 20px">
+			<a :href="'post.html#rep&'+topic.tid+'&'+topic.bname" style="text-underline: none;color: #FFFFFF">回复该帖</a></button>
+
+		<table class="table" style="margin-top:20px;text-align: center;border: 1px #d6e9c6 solid">
+			<tr>
+				<th style="text-align: center;font-size: 16px;"> </th>
+				<th style="text-align: center;font-size: 16px;">本页主题:{{topic.title}}</th>
+			</tr>
+			<tr>
+<!--				头像区-->
+				<td style="width: 20%;text-align: center;padding-top: 20px;border-right: 1px #d6e9c6 solid;">
+					<div>
+					<img :src="'../image/head/'+topic.head"/>
+					<div>{{topic.uname}}</div>
+					注册:{{topic.regtime}}<br/>
+					</div>
+				</td>
+<!--				内容区-->
+				<td style="text-align: center;">
+					<H4>{{topic.title}}</H4>
+					<div v-html="topic.content">{{topic.content}}</div>
+					<div class="tipad gray">
+						发表：[{{topic.publishtime}}] &nbsp;
+						最后修改:[{{topic.modifytime}}]
+					</div>
+				</td>
+			</tr>
+<!--			回复区-->
+			<tbody v-for="replay in replays">
+			<tr>
+				<td style="width: 20%;text-align: center;padding-top: 35px;border-right: 1px #d6e9c6 solid;">
+					<img :src="'../image/head/'+replay.head"/>
+					<div>{{replay.uname}}</div>
+					注册:{{replay.regtime}}<br/>
+				</td>
+				<td >
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h3 class="panel-title"  v-if="replay.title" style="text-align: left;font-size: 12px" >回复的标题:[{{replay.title}}]</h3>
+						</div>
+						<div class="panel-body" style="text-align: left;background-color: #FFFFFF" >
+							<div v-html="replay.content">{{replay.content}}</div>
+
+						</div>
+						<div class="panel-footer"  style="text-align: left;background-color:#FFFFFF">
+							发表：[{{replay.publishtime}}] &nbsp;
+							最后修改:[{{replay.modifytime}}]
+							<span v-if="uid==replay.uid || uid==30">
+							&nbsp;<a href="javascript:void(0)" @click="delReply(replay.rid)">[删除]</a>
+							<a :href="'post.html#update&'+replay.rid+'&'+topic.bname">[修改]</a>
+							</span>
+							<div style="float: right">
+								<a href="javascript:void(0)" @click="dianzan(uid,replay.rid)" >
+								<img src="../image/good.png" width="20" > <a v-for="allg in allgood" v-if="replay.rid==allg.rid">{{allg.total}}<a/>
+								</a>
+							</div>
+
+						</div>
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<ul class="pager">
+		<li class="previous"><a href="javascript:void(0)" >Previous</a></li>
+		<li class="next"><a href="javascript:void(0)" >Next</a></li>
+	</ul>
+
+</div>	
+</div>
+
+<!--      声明        -->
+<bR>
+<center class="gray">© 2020 源辰信息. ALL RIGHTS RESERVED.</center>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../js/qs.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script>
+var hash=window.location.hash;
+var tid=hash.replace("#",'');
+var token=localStorage.getItem("token");
+
+var vm=new Vue({
+	el:'#yc_detail',
+	data:{
+		topic:{},
+		replays:{},
+		uname:'匿名',
+		uid:0,
+		onlogin:false,
+		outlogin:true,
+		allgood:'',
+		games:
+			{ rid: '',total:''}
+
+
+
+	},
+	methods:{
+		redName(username){
+			switch (username) {
+				case 'mizuho': return'red';break;
+				default: return '#dff0d8';break;
+			}
+		},
+		delReply:function(id){
+			axios.all([delRepy(id),findByTopicId()]).then(axios.spread((fn1,fn2)=>{
+				console.log(fn1);
+				console.log(fn2);
+				if(fn1.data.code>0){//用户未登录
+					this.topic=fn2.data.topic;
+					this.replays=fn2.data.replays;
+					console.log(this.topic);
+					alert("删除成功");
+					location.reload();
+
+				}else{
+					alert("删除失败");
+
+				}
+			}));
+		},
+		dianzan:function(uid,id){
+			axios.get("../bbnmd/view/good",{params:{uid:uid,rid:id,tid:this.topic.tid}}).then(result=>{
+
+				if(result.data.code==1&&result.data.data==1) {
+					let dataone={ rid: '',total:''};
+
+					dataone.rid=id;
+					dataone.total=result.data.data;
+					this.allgood.push(dataone);
+				}else if(result.data.code==0){alert(result.data.data)}else{
+					this.allgood.forEach(function(item, index) {
+						if(item.rid==id){
+							item.total=result.data.data;
+						}
+					})
+
+				}
+			})
+		}
+	},
+	mounted:function(){
+		//页面加载完成后
+		axios.all([checkLogin(),findByTopicId(),findGoodByTopicId()]).then(axios.spread((fn1,fn2,fn3)=>{
+			if(!fn1.data){//用户未登录
+				window.location.href='login.html';
+			}else{
+				this.allgood=fn3.data;
+
+				this.uname=fn1.data.data.uname;
+
+				this.uid=fn1.data.data.uid;
+				this.outlogin=false;
+				this.onlogin=true;
+				this.topic=fn2.data.topic;
+				this.replays=fn2.data.replays;
+				console.log(fn1.data.data);
+				console.log(fn2.data.replays);
+				console.log(fn3.data);
+				console.log(this.replays);
+				console.log(this.topic);
+			}
+		}));
+	}
+});
+
+function delRepy(id){
+	return axios.delete("../bbnmd/view/"+id);
+}
+//检查用户是否登录
+function checkLogin(){
+	return axios.get("../bbnmd/view/check/"+token);
+}
+//显示首页版本信息
+function findByTopicId(){
+	return axios.get("../bbnmd/view/"+tid);
+}
+function findGoodByTopicId(){
+	return axios.get("../bbnmd/view/getgood?tid="+tid);
+}
+</script>
+</body>
+</html>
+

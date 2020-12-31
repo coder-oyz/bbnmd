@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>论坛--发帖</title>
+
+	<Link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+<style>
+
+.topic ul,.topic li{
+list-style:none;
+}
+
+.topic li:first-child input{
+display:inline-block;
+width:300px;
+}
+.editor1{
+margin-left: 5%;
+	}
+ body{
+	width: 80%;
+	margin-left: 10%;
+}
+	#yc_post{
+		margin-right: 3%;
+	}
+</style>
+</head>
+
+<body >
+
+<nav class="navbar navbar-inverse">
+	<!--	填充-->
+</nav>
+<nav class="navbar  navbar-default navbar-fixed-top">
+	<img alt="icon" src="../image/logo.png">
+
+</nav>
+
+<!--      用户信息、登录、注册        -->
+
+<!--	<div class="h" v-if="outlogin">-->
+<!--		您尚未　<a href="login.html">登录</a>-->
+<!--		&nbsp;| &nbsp; <a href="reg.html">注册</a> |-->
+<!--	</div>-->
+<!--	<div class="h" v-if="onlogin">-->
+<!--		欢迎：<text id="userNameIFLogin"></text>-->
+<!--	</div>-->
+	<div class="panel panel-success">
+		<div class="panel-heading" style="font-size: 18px">&nbsp;<a href="index.html">论坛首页</a>&gt;&gt;
+			<a href="list.html" id="boardid">回复页面</a>
+
+		</div>
+
+		<div class="panel-body">
+			<p>Peace cannot be kept by force，it can only be achieved by understanding.</p>
+			<p style="float: right">——Mobile Suit Gundam 00</p>
+		</div>
+		<div id="yc_post" class="topic">
+			<form>
+				<ul>
+
+					<li><label>主题：</label><input type="text" id="title"/></li>
+					<li><label>内容：</label><textarea id="editor1" ></textarea></li>
+					<br>
+					<li><input class="btn btn-success" type="button" value="发布" onclick="publish()"/></li>
+				</ul>
+			</form>
+		</div>
+	</div>
+
+
+
+<!--      声明        -->
+<br/>
+<center class="gray">© 2020 源辰信息. ALL RIGHTS RESERVED.</center>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../ckeditor/ckeditor.js"></script>
+<script src="../ckeditor/config.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../js/qs.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+CKEDITOR.replace('editor1');
+var topicid;
+var boardname;
+var boardid;
+var replyid;
+var hash=window.location.hash;
+hash=hash.replace('#','');
+hash=hash.split('&');
+var token =localStorage.getItem("token");
+//alert("length:"+hash.length);
+if(hash.length!=3){
+	
+	window.location.href='index.html';
+}
+boardname=hash[2];
+$('#boardid').text(boardname);
+if('add'==hash[0]){//添加主题
+	boardid=hash[1];
+}else if('update'==hash[0]){//修改回帖
+	replyid=hash[1];
+	//1
+
+
+	axios.get('../bbnmd/post/'+replyid).then(result=>{
+		var data=result.data.data;
+		console.log(data);
+		$('#title').val(data.title);
+		CKEDITOR.instances.editor1.setData(data.content);	
+	});
+}else if('rep'==hash[0]){//对某个主题进行回复
+	topicid=hash[1];
+}
+
+function publish(){
+	var title=$('#title').val();
+	var content=CKEDITOR.instances.editor1.getData();
+	if('add'==hash[0]){//添加主题
+		//2
+		axios.post("../bbnmd/post/saveTopic/"+token, {title:title,content:content,bid:boardid}).then(result=>{
+			if(result.data.code>0){
+				alert('发帖成功');
+				$('#title').val('');
+				CKEDITOR.instances.editor1.setData('');
+				window.location.href="list.html#"+boardid+"&"+boardname;
+			}else{
+				alert('发帖失败');
+			}
+		});
+
+
+	}else if('update'==hash[0]){//修改回帖
+
+
+		axios.put("../bbnmd/post", {rid:replyid,title:title,content:content}).then(result=>{
+			if(result.data.code>0){
+				console.log(result.data);
+				alert('回帖修改成功');
+
+			}else{
+				alert('回帖修改失败');
+			}
+		});
+
+	}else if('rep'==hash[0]){//对某个主题进行回复
+		//4
+		console.log(title);
+		console.log(content);
+		axios.post("../bbnmd/post/saveReplay/"+token, {title:title,content:content,tid:topicid}).then(result=>{
+			if(result.data.code>0){
+				alert('回帖成功');
+				window.location.href='detail.html#'+topicid;
+			}else{
+				alert('回帖失败');
+			}
+		});
+
+
+	}
+
+
+}
+
+
+
+
+</script>
+</body>
+</html>
+

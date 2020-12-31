@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/bbnmb-base-microserivce.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/bbnmb-base-microserivce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/bbnmd.iml" filepath="$PROJECT_DIR$/.idea/bbnmd.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-domain/bbnmd-domain.iml" filepath="$PROJECT_DIR$/bbnmd-domain/bbnmd-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-post/bbnmd-post.iml" filepath="$PROJECT_DIR$/bbnmd-post/bbnmd-post.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-user/bbnmd-user.iml" filepath="$PROJECT_DIR$/bbnmd-user/bbnmd-user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-view/bbnmd-view.iml" filepath="$PROJECT_DIR$/bbnmd-view/bbnmd-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/config/config.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/config/config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/config2/config2.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/config2/config2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/config3/config3.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/config3/config3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/dashboard/dashboard.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/dashboard/dashboard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/eureka-for-high-config/eureka-for-high-config.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/eureka-for-high-config/eureka-for-high-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-post/post-client/post-client.iml" filepath="$PROJECT_DIR$/bbnmd-post/post-client/post-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-post/post-domain/post-domain.iml" filepath="$PROJECT_DIR$/bbnmd-post/post-domain/post-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-post/post-restapi/post-restapi.iml" filepath="$PROJECT_DIR$/bbnmd-post/post-restapi/post-restapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-post/post-web/post-web.iml" filepath="$PROJECT_DIR$/bbnmd-post/post-web/post-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/security/security.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/security/security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/turbine/turbine.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/turbine/turbine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-user/user-client/user-client.iml" filepath="$PROJECT_DIR$/bbnmd-user/user-client/user-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-user/user-domain/user-domain.iml" filepath="$PROJECT_DIR$/bbnmd-user/user-domain/user-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-user/user-restapi/user-restapi.iml" filepath="$PROJECT_DIR$/bbnmd-user/user-restapi/user-restapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-user/user-web/user-web.iml" filepath="$PROJECT_DIR$/bbnmd-user/user-web/user-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-view/view-client/view-client.iml" filepath="$PROJECT_DIR$/bbnmd-view/view-client/view-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-view/view-domain/view-domain.iml" filepath="$PROJECT_DIR$/bbnmd-view/view-domain/view-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-view/view-restapi/view-restapi.iml" filepath="$PROJECT_DIR$/bbnmd-view/view-restapi/view-restapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmd-view/view-web/view-web.iml" filepath="$PROJECT_DIR$/bbnmd-view/view-web/view-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbnmb-base-microservice/zuul/zuul.iml" filepath="$PROJECT_DIR$/bbnmb-base-microservice/zuul/zuul.iml" />
+    </modules>
+  </component>
+</project>

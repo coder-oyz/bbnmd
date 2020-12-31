@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>论坛--发帖</title>
+<Link rel="stylesheet" type="text/css" href="../style/style.css" />
+<style>
+.topic{
+margin:0 auto;
+width:90%;
+}
+.topic ul{
+width:100%;
+}
+.topic li{
+width:100%;
+margin-top:15px;
+}
+.topic ul,.topic li{
+list-style:none;
+}
+.topic li label{
+display:inline-block;
+width:100px;
+text-align:right;
+}
+.topic li:first-child input{
+display:inline-block;
+width:300px;
+}
+</style>
+</head>
+
+<body>
+
+<div>
+	<img src="../image/logo.gif">
+</div>
+
+<!--      用户信息、登录、注册        -->
+
+	<div class="h" v-if="outlogin">
+		您尚未　<a href="login.html">登录</a>
+		&nbsp;| &nbsp; <a href="reg.html">注册</a> |
+	</div>
+	<div class="h" v-if="onlogin">
+		欢迎：{{uname}}
+	</div>
+
+<!--      主体        -->
+<div><br/>
+	<!--      导航        -->
+<div>
+	&gt;&gt;<b><a href="index.html">论坛首页</a></b>&gt;&gt;
+	<b><a href="list.html" id="boardid">灌水乐园</a></b>
+</div>
+<br/>
+<div id="yc_post" class="topic">
+	<form>
+		<ul>
+
+			<li><label>主题：</label><input type="text" id="title"/></li>
+			<li><label>内容：</label><textarea id="editor1" ></textarea></li>
+			<li><label></label><input type="button" value="发布" onclick="publish()"/></li>
+		</ul>
+	</form>
+</div>
+</div>
+</div>
+<!--      声明        -->
+<br/>
+<center class="gray">源辰信息</center>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<!-- <script src="js/showpic.js"></script> -->
+<script src="../ckeditor/ckeditor.js"></script>
+	<script src="../js/vue.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../js/qs.js"></script>
+<script type="text/javascript">
+CKEDITOR.replace('editor1');
+var topicid;
+var boardname;
+var boardid;
+var replyid;
+var hash=window.location.hash;
+hash=hash.replace('#','');
+hash=hash.split('&');
+alert("length:"+hash.length);
+if(hash.length!=3){
+	
+	window.location.href='index.html';
+}
+boardname=hash[2];
+$('#boardid').text(boardname);
+if('add'==hash[0]){//添加主题
+	boardid=hash[1];
+}else if('update'==hash[0]){//修改回帖
+	replyid=hash[1];
+	//1
+
+
+	axios.get('../bbnmd/post/'+replyid).then(result=>{
+		var data=result.data.data;
+		console.log(data);
+		$('#title').val(data.title);
+		CKEDITOR.instances.editor1.setData(data.content);	
+	});
+}else if('rep'==hash[0]){//对某个主题进行回复
+	topicid=hash[1];
+}
+
+function publish(){
+	var title=$('#title').val();
+	var content=CKEDITOR.instances.editor1.getData();
+	if('add'==hash[0]){//添加主题
+		//2
+		axios.post("../bbnmd/post/saveTopic", {params:{title:title,content:content,bid:boardid}}).then(result=>{
+			if(result.data.code>0){
+				alert('发帖成功');
+				$('#title').val('');
+				CKEDITOR.instances.editor1.setData('');
+			}else{
+				alert('发帖失败');
+			}
+		});
+
+
+	}else if('update'==hash[0]){//修改回帖
+
+
+		axios.put("../bbnmd/post", {params:{rid:replyid,title:title,content:content}}).then(result=>{
+			if(result.data.code>0){
+				alert('回帖修改成功');
+			}else{
+				alert('回帖修改失败');
+			}
+		});
+
+	}else if('rep'==hash[0]){//对某个主题进行回复
+		//4
+		console.log(title);
+		console.log(topicid);
+		$.post("../bbnmd/post/saveReplay", {params:{title:title,content:content,tid:topicid}}).then(result=>{
+
+			if(result.data.code>0){
+
+				alert('回帖成功');
+				window.location.href='detail.html#'+topicid;
+			}else{
+				alert('回帖失败');
+			}
+		});
+
+
+	}
+}
+</script>
+</body>
+</html>
+
